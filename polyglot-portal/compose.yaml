@@ -3,6 +3,7 @@ name: polyglot-portal
 services:
   postgres:
     image: postgres:16-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -19,6 +20,7 @@ services:
 
   auth-service:
     build: ./auth-service
+    restart: unless-stopped
     environment:
       DB_HOST: postgres
       DB_NAME: ${DB_NAME}
@@ -36,16 +38,19 @@ services:
 
   dashboard-service:
     build: ./dashboard-service
+    restart: unless-stopped
     networks:
       - frontend-net
 
   analytics-service:
     build: ./analytics-service
+    restart: unless-stopped
     networks:
       - frontend-net
 
   proxy:
     image: nginx:alpine
+    restart: unless-stopped
     volumes:
       - ./proxy/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
